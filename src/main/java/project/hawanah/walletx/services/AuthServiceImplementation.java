@@ -40,7 +40,7 @@ public class AuthServiceImplementation implements AuthService{
 
     private RegisterUserResponse respondToUserRegistration(User user) {
         RegisterUserResponse response = new RegisterUserResponse();
-        response.setMessage("User registered successfully");
+        response.setMessage("User registered successfully, Please, check your email for activation code");
         response.setId(user.getId());
         return response;
     }
