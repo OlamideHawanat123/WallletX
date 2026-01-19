@@ -19,14 +19,15 @@ public class EmailService {
         message.setTo(email);
         message.setText(
                 "Email Activation Code: " + code + "\n" +
-                        "Use this code to activate your account."
+                        "Use this code to activate your account." +
+                        "For security reasons, this activation code is valid for ten (10) minutes only"
         );
         message.setSubject("WalletX: Account Activation-" + code);
         message.setFrom("raheemhawanat@gmail.com");
         mailSender.send(message);
-        
-        
     }
+
+
 
 
 }

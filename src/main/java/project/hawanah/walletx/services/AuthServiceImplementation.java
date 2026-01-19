@@ -16,11 +16,15 @@ public class AuthServiceImplementation implements AuthService{
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private VerificationService verificationService;
+
     @Override
     public RegisterUserResponse registerUser( RegisterUserRequest request) {
        if (checkEmailExistence(request.getEmail())) throw new EmailExistsException("Email already exists");
        User user = Mapper.mapRequestToUser(request);
         userRepository.save(user);
+        verificationService.sendVerificationCode(user.getEmail());
        return respondToUserRegistration(user);
     }
 
