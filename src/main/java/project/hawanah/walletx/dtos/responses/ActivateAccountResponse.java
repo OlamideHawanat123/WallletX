@@ -4,8 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class RegisterUserResponse {
+public class ActivateAccountResponse {
     private String message;
-    private String id;
-    private String verificationId;
 }

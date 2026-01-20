@@ -1,6 +1,5 @@
 package project.hawanah.walletx.services;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.hawanah.walletx.data.model.User;
@@ -24,28 +23,19 @@ public class AuthServiceImplementation implements AuthService{
        if (checkEmailExistence(request.getEmail())) throw new EmailExistsException("Email already exists");
        User user = Mapper.mapRequestToUser(request);
         userRepository.save(user);
-        verificationService.sendVerificationCode(user.getEmail());
-       return respondToUserRegistration(user);
+        String code = verificationService.sendVerificationCode(user.getEmail());
+       return respondToUserRegistration(user, code);
+
     }
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-    private RegisterUserResponse respondToUserRegistration(User user) {
+    private RegisterUserResponse respondToUserRegistration(User user, String code) {
         RegisterUserResponse response = new RegisterUserResponse();
         response.setMessage("User registered successfully, Please, check your email for activation code");
         response.setId(user.getId());
+        response.setVerificationId(code);
         return response;
     }
 
