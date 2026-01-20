@@ -15,6 +15,7 @@ import project.hawanah.walletx.services.AuthService;
 @RestController
 @RequestMapping("auth/")
 public class AuthControlller {
+
     @Autowired
     private AuthService authService;
 

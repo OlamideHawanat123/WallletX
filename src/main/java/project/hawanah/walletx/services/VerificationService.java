@@ -29,6 +29,13 @@ public class VerificationService {
         emailService.sendAccountActivationEmail(email, code);
     }
 
+    public ActivateAccountResponse activateAccount(ActivateAccountRequest request){
+        VerificationCode verificationCode = verificationCodeRepository.findById(request.getVerificationId());
+        if (verificationCode.isExpired()) throw new ExpiredVerificationCodeException("Code is exxpired");
+        if ()
+
+    }
+
 
 
 

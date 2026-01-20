@@ -17,6 +17,7 @@ public class VerificationCode {
     private String code;
     private String email;
     private Instant expiryDate;
+    private boolean isExpired;
 
     public  VerificationCode(String code, String email) {
         this.code = code;
