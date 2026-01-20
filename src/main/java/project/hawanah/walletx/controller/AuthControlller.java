@@ -4,13 +4,13 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import project.hawanah.walletx.dtos.requests.ActivateAccountRequest;
 import project.hawanah.walletx.dtos.requests.RegisterUserRequest;
+import project.hawanah.walletx.dtos.responses.ActivateAccountResponse;
 import project.hawanah.walletx.dtos.responses.RegisterUserResponse;
 import project.hawanah.walletx.services.AuthService;
+import project.hawanah.walletx.services.VerificationService;
 
 @RestController
 @RequestMapping("auth/")
@@ -19,10 +19,18 @@ public class AuthControlller {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private VerificationService verificationService;
+
     @PostMapping("register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterUserRequest registerUserRequest) {
         RegisterUserResponse registerUserResponse = authService.registerUser(registerUserRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(registerUserResponse);
+    }
 
+    @PatchMapping("activateAccount")
+    public ResponseEntity<?> activateAccount(@Valid @RequestBody ActivateAccountRequest activateAccountRequest) {
+        ActivateAccountResponse response = verificationService.activateAccount(activateAccountRequest);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
     }
 }

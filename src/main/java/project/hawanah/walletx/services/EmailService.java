@@ -27,6 +27,15 @@ public class EmailService {
         mailSender.send(message);
     }
 
+    public void sendAccountActivationSuccessEmail(String email, String firstName){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("WalletX: Account Activation-" + email);
+        message.setText("Dear" + firstName + "\n" + """
+                Your account has been successfully activated."
+                Happy Banking!
+                """);
+    }
 
 
 

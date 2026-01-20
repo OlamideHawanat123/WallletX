@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import project.hawanah.walletx.data.model.VerificationCode;
 
 import java.time.Instant;
+import java.util.List;
 
 @Repository
 public interface VerificationCodeRepository extends JpaRepository<VerificationCode, String> {
@@ -16,4 +17,6 @@ public interface VerificationCodeRepository extends JpaRepository<VerificationCo
     @Modifying
     @Query("DELETE FROM VerificationCode v WHERE v.expiryDate < :now")
     void deleteExpiredVerificationCodes(Instant now);
+
+    VerificationCode findByCode(String code);
 }

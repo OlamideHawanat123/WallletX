@@ -18,24 +18,26 @@ public class AuthServiceImplementation implements AuthService{
     @Autowired
     private VerificationService verificationService;
 
+
     @Override
     public RegisterUserResponse registerUser( RegisterUserRequest request) {
        if (checkEmailExistence(request.getEmail())) throw new EmailExistsException("Email already exists");
        User user = Mapper.mapRequestToUser(request);
         userRepository.save(user);
         String code = verificationService.sendVerificationCode(user.getEmail());
-       return respondToUserRegistration(user, code);
+        String codeId = verificationService.getCodeId(code);
+       return respondToUserRegistration(user, codeId);
 
     }
 
 
 
 
-    private RegisterUserResponse respondToUserRegistration(User user, String code) {
+    private RegisterUserResponse respondToUserRegistration(User user, String codeId) {
         RegisterUserResponse response = new RegisterUserResponse();
         response.setMessage("User registered successfully, Please, check your email for activation code");
         response.setId(user.getId());
-        response.setVerificationId(code);
+        response.setVerificationId(codeId);
         return response;
     }
 

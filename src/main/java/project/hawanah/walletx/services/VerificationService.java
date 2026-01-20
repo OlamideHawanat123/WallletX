@@ -11,8 +11,6 @@ import project.hawanah.walletx.dtos.requests.ActivateAccountRequest;
 import project.hawanah.walletx.dtos.responses.ActivateAccountResponse;
 import project.hawanah.walletx.exceptions.ExpiredVerificationCodeException;
 import project.hawanah.walletx.exceptions.InvalidCodeException;
-
-import javax.security.auth.login.AccountException;
 import java.time.Instant;
 import java.util.Random;
 
@@ -60,6 +58,11 @@ public class VerificationService {
         verificationCodeRepository.deleteExpiredVerificationCodes(Instant.now());
     }
 
+    public String getCodeId(String code){
+        VerificationCode verificationCode = verificationCodeRepository.findByCode(code);
+        return verificationCode.getId();
+    }
+
     public String generateVerificationCode(){
         return String.valueOf(100000 + new Random().nextInt(900000));
     }
@@ -67,6 +70,7 @@ public class VerificationService {
     private void verifyUser(String email){
         User user = userRepository.findByEmail(email);
         user.setActivated(true);
+        emailService.sendAccountActivationSuccessEmail(user.getEmail(), user.getLastName());
     }
 
     private ActivateAccountResponse setVerificationResponse(){
