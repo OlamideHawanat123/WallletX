@@ -2,6 +2,9 @@ package project.hawanah.walletx.services;
 
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import project.hawanah.walletx.data.model.User;
 import project.hawanah.walletx.data.model.VerificationCode;
@@ -11,6 +14,8 @@ import project.hawanah.walletx.dtos.requests.UserLoginRequest;
 import project.hawanah.walletx.dtos.responses.RegisterUserResponse;
 import project.hawanah.walletx.dtos.responses.UserLoginResponse;
 import project.hawanah.walletx.exceptions.EmailExistsException;
+import project.hawanah.walletx.exceptions.ImpermissibleRequestException;
+import project.hawanah.walletx.exceptions.InvalidCredentialsException;
 import project.hawanah.walletx.utils.Mapper;
 
 @Service
@@ -21,6 +26,8 @@ public class AuthServiceImplementation implements AuthService{
 
     @Autowired
     private VerificationService verificationService;
+
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
     @Override
@@ -39,7 +46,11 @@ public class AuthServiceImplementation implements AuthService{
 
     @Override
     public UserLoginResponse login(UserLoginRequest request) {
-        return null;
+        User user = userRepository.findByEmail(request.getEmail());
+        if (user == null) throw new UsernameNotFoundException("User not found");
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) throw new InvalidCredentialsException("Invalid details");
+        if (!user.isActivated()) throw new ImpermissibleRequestException("You're not permitted to login!");
+
     }
 
 
