@@ -7,7 +7,9 @@ import project.hawanah.walletx.data.model.User;
 import project.hawanah.walletx.data.model.VerificationCode;
 import project.hawanah.walletx.data.repository.UserRepository;
 import project.hawanah.walletx.dtos.requests.RegisterUserRequest;
+import project.hawanah.walletx.dtos.requests.UserLoginRequest;
 import project.hawanah.walletx.dtos.responses.RegisterUserResponse;
+import project.hawanah.walletx.dtos.responses.UserLoginResponse;
 import project.hawanah.walletx.exceptions.EmailExistsException;
 import project.hawanah.walletx.utils.Mapper;
 
@@ -35,7 +37,10 @@ public class AuthServiceImplementation implements AuthService{
 
     }
 
-
+    @Override
+    public UserLoginResponse login(UserLoginRequest request) {
+        return null;
+    }
 
 
     private RegisterUserResponse respondToUserRegistration(User user, String codeId) {
