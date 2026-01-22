@@ -1,8 +1,10 @@
 package project.hawanah.walletx.services;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import project.hawanah.walletx.data.model.User;
+import project.hawanah.walletx.data.model.VerificationCode;
 import project.hawanah.walletx.data.repository.UserRepository;
 import project.hawanah.walletx.dtos.requests.RegisterUserRequest;
 import project.hawanah.walletx.dtos.responses.RegisterUserResponse;
@@ -20,13 +22,16 @@ public class AuthServiceImplementation implements AuthService{
 
 
     @Override
-    public RegisterUserResponse registerUser( RegisterUserRequest request) {
-       if (checkEmailExistence(request.getEmail())) throw new EmailExistsException("Email already exists");
-       User user = Mapper.mapRequestToUser(request);
-        userRepository.save(user);
-        String code = verificationService.sendVerificationCode(user.getEmail());
-        String codeId = verificationService.getCodeId(code);
-       return respondToUserRegistration(user, codeId);
+    @Transactional
+    public RegisterUserResponse registerUser(RegisterUserRequest request) {
+        if (checkEmailExistence(request.getEmail())) throw new EmailExistsException("Email already exists");
+
+        User user = Mapper.mapRequestToUser(request);
+        user = userRepository.save(user);
+
+        VerificationCode vCode = verificationService.sendVerificationCode(user.getEmail());
+        verificationService.sendVerificationCode(user.getEmail());
+        return respondToUserRegistration(user, vCode.getId());
 
     }
 

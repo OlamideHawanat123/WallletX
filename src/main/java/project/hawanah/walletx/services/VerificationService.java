@@ -26,14 +26,11 @@ public class VerificationService {
     @Autowired
     private EmailService emailService;
 
-    public String sendVerificationCode(String email){
+    // Change return type from String (code) to the VerificationCode object itself
+    public VerificationCode sendVerificationCode(String email){
         String code = generateVerificationCode();
-        VerificationCode verificationCode = new VerificationCode();
-        verificationCode.setCode(code);
-        verificationCode.setEmail(email);
-        verificationCodeRepository.save(verificationCode);
-        emailService.sendAccountActivationEmail(email, code);
-        return code;
+        VerificationCode vCode = new VerificationCode(code, email); // Using the fix from before
+        return verificationCodeRepository.save(vCode); // Return the saved entity
     }
 
     public ActivateAccountResponse activateAccount(ActivateAccountRequest request){
@@ -70,6 +67,7 @@ public class VerificationService {
     private void verifyUser(String email){
         User user = userRepository.findByEmail(email);
         user.setActivated(true);
+        userRepository.save(user);
         emailService.sendAccountActivationSuccessEmail(user.getEmail(), user.getLastName());
     }
 
