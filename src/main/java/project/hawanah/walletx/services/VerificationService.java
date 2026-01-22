@@ -26,11 +26,11 @@ public class VerificationService {
     @Autowired
     private EmailService emailService;
 
-    // Change return type from String (code) to the VerificationCode object itself
     public VerificationCode sendVerificationCode(String email){
         String code = generateVerificationCode();
-        VerificationCode vCode = new VerificationCode(code, email); // Using the fix from before
-        return verificationCodeRepository.save(vCode); // Return the saved entity
+        VerificationCode vCode = new VerificationCode(code, email);
+        emailService.sendAccountActivationEmail(email, code);
+        return verificationCodeRepository.save(vCode);
     }
 
     public ActivateAccountResponse activateAccount(ActivateAccountRequest request){
@@ -44,7 +44,6 @@ public class VerificationService {
             throw new ExpiredVerificationCodeException("Code is expired!");
         if (!verificationCode.getCode().equals(request.getCode())) throw new InvalidCodeException("Code is invalid");
         verifyUser(verificationCode.getEmail());
-
         return setVerificationResponse();
 
     }

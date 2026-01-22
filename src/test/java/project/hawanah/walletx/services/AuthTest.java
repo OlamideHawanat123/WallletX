@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import project.hawanah.walletx.dtos.requests.RegisterUserRequest;
 import project.hawanah.walletx.dtos.responses.RegisterUserResponse;
+import project.hawanah.walletx.dtos.responses.UserLoginRequest;
 import project.hawanah.walletx.exceptions.EmailExistsException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,6 +50,16 @@ public class AuthTest {
         request.setAddress("Kingsway street, Yaba");
         request.setPhoneNumber("");
         RegisterUserResponse response = authService.registerUser(request);
+    }
+
+    @Test
+    public void testThatUsercanLogin(){
+        UserLoginRequest request = new UserLoginRequest();
+        request.setEmail("raheemhawanat@gmail.com");
+        request.setPassword("olamide123");
+        UserLoginResponse response = authService.login(request);
+        assertNotNull(response);
+        assertEquals("login successful!", response.getMessage());
     }
 
 }
