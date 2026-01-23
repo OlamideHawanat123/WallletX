@@ -44,8 +44,8 @@ public class VerificationService {
             throw new ExpiredVerificationCodeException("Code is expired!");
         if (!verificationCode.getCode().equals(request.getCode())) throw new InvalidCodeException("Code is invalid");
         verifyUser(verificationCode.getEmail());
-        return setVerificationResponse();
 
+        return setVerificationResponse();
     }
 
 

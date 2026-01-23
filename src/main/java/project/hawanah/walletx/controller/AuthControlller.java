@@ -7,8 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import project.hawanah.walletx.dtos.requests.ActivateAccountRequest;
 import project.hawanah.walletx.dtos.requests.RegisterUserRequest;
+import project.hawanah.walletx.dtos.requests.UserLoginRequest;
 import project.hawanah.walletx.dtos.responses.ActivateAccountResponse;
 import project.hawanah.walletx.dtos.responses.RegisterUserResponse;
+import project.hawanah.walletx.dtos.responses.UserLoginResponse;
 import project.hawanah.walletx.services.AuthService;
 import project.hawanah.walletx.services.VerificationService;
 
@@ -32,5 +34,11 @@ public class AuthControlller {
     public ResponseEntity<?> activateAccount(@Valid @RequestBody ActivateAccountRequest activateAccountRequest) {
         ActivateAccountResponse response =  verificationService.activateAccount(activateAccountRequest);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody UserLoginRequest userLoginRequest) {
+        UserLoginResponse userLoginResponse = authService.login(userLoginRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(userLoginResponse);
     }
 }

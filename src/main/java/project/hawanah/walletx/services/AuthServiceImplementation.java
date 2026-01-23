@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import project.hawanah.walletx.configuration.jwt.JwtUtils;
 import project.hawanah.walletx.data.model.User;
 import project.hawanah.walletx.data.model.VerificationCode;
 import project.hawanah.walletx.data.repository.UserRepository;
@@ -27,6 +28,8 @@ public class AuthServiceImplementation implements AuthService{
     @Autowired
     private VerificationService verificationService;
 
+    @Autowired
+    private JwtUtils jwtUtils;
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
@@ -41,7 +44,6 @@ public class AuthServiceImplementation implements AuthService{
         VerificationCode vCode = verificationService.sendVerificationCode(user.getEmail());
         verificationService.sendVerificationCode(user.getEmail());
         return respondToUserRegistration(user, vCode.getId());
-
     }
 
     @Override
@@ -50,7 +52,8 @@ public class AuthServiceImplementation implements AuthService{
         if (user == null) throw new UsernameNotFoundException("User not found");
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) throw new InvalidCredentialsException("Invalid details");
         if (!user.isActivated()) throw new ImpermissibleRequestException("You're not permitted to login!");
-
+        String token = jwtUtils.generateToken(user.getEmail());
+        return respondToUserLogin(token);
     }
 
 
@@ -59,6 +62,13 @@ public class AuthServiceImplementation implements AuthService{
         response.setMessage("User registered successfully, Please, check your email for activation code");
         response.setId(user.getId());
         response.setVerificationId(codeId);
+        return response;
+    }
+
+    private UserLoginResponse respondToUserLogin(String token) {
+        UserLoginResponse response = new UserLoginResponse();
+        response.setMessage("Login successful!");
+        response.setToken(token);
         return response;
     }
 
