@@ -35,6 +35,8 @@ public class EmailService {
                 Your account has been successfully activated."
                 Happy Banking!
                 """);
+        message.setFrom("WalletX");
+        mailSender.send(message);
     }
 
 

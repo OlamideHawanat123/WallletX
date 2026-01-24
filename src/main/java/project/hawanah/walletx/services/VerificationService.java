@@ -2,6 +2,7 @@ package project.hawanah.walletx.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import project.hawanah.walletx.data.model.User;
 import project.hawanah.walletx.data.model.VerificationCode;
@@ -65,6 +66,7 @@ public class VerificationService {
 
     private void verifyUser(String email){
         User user = userRepository.findByEmail(email);
+        if (user == null) throw new UsernameNotFoundException("User doesn't exist!");
         user.setActivated(true);
         userRepository.save(user);
         emailService.sendAccountActivationSuccessEmail(user.getEmail(), user.getLastName());
