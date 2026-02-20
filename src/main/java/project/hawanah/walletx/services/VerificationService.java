@@ -27,6 +27,9 @@ public class VerificationService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private WalletService walletService;
+
     public VerificationCode sendVerificationCode(String email){
         String code = generateVerificationCode();
         VerificationCode vCode = new VerificationCode(code, email);
@@ -45,7 +48,7 @@ public class VerificationService {
             throw new ExpiredVerificationCodeException("Code is expired!");
         if (!verificationCode.getCode().equals(request.getCode())) throw new InvalidCodeException("Code is invalid");
         verifyUser(verificationCode.getEmail());
-
+        walletService.createWallet(verificationCode.getEmail());
         return setVerificationResponse();
     }
 
