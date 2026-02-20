@@ -26,7 +26,7 @@ public class Mapper {
     public static Wallet mapDetailsToWallet(User user){
         Wallet  wallet = new Wallet();
         wallet.setBalance(BigDecimal.ZERO);
-        wallet.setUserId(user.getId());
+        wallet.setUser(user);
         wallet.setCreatedAt(Instant.now());
         return wallet;
     }

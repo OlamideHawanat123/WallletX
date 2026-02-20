@@ -1,7 +1,6 @@
 package project.hawanah.walletx.data.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,10 +14,12 @@ public class Wallet {
     @Id
     private String id;
 
-    private String userId;
-
     private BigDecimal balance;
 
     private Instant createdAt;
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }

@@ -30,6 +30,6 @@ public class User {
     @Column(nullable = false)
     private boolean isActivated = false;
 
-    @OneToOne(mappedBy = "users", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private Wallet wallet;
 }
