@@ -25,7 +25,7 @@ public class AuthTest {
         request.setFirstName("Olamide");
         request.setLastName("Bello");
         request.setAge(15);
-        request.setEmail("raheemhawanat@gmail.com");
+        request.setEmail("olamidehawanat@gmail.com");
         request.setPassword("olamide123");
         request.setAddress("Kingsway street, Yaba");
         request.setPhoneNumber("09138146912");
