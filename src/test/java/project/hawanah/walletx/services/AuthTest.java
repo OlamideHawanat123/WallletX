@@ -3,9 +3,11 @@ package project.hawanah.walletx.services;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import project.hawanah.walletx.TestMailConfig;
 import project.hawanah.walletx.dtos.requests.ActivateAccountRequest;
 import project.hawanah.walletx.dtos.requests.RegisterUserRequest;
 import project.hawanah.walletx.dtos.responses.RegisterUserResponse;
@@ -17,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
+@Import(TestMailConfig.class)
 public class AuthTest {
     @Autowired
     private AuthService authService;
